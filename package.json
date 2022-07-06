@@ -1,0 +1,23 @@
+{
+  "name": "sass-learn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "sass --watch scss:css",
+    "watch": "sass --watch src/scss:dist/css",
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html --dist-dir www"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "engines": {
+    "node": ">12"
+  },
+  "dependencies": {
+    "parcel": "^2.6.2"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "2.6.2",
+    "sass": "^1.53.0"
+  }
+}
