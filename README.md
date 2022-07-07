@@ -1,3 +1,5 @@
 # scss
 
-## use forward
+## stylelint
+
+npm install --save-dev stylelint stylelint-config-standard
