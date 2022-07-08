@@ -1,0 +1,93 @@
+// Property Declarations
+
+// scssScript表达式
+.circle {
+  $size: 100px;
+
+  width: $size;
+  height: $size;
+  border-radius: $size * 0.5;
+}
+
+// interpolation 插值
+@mixin prefix($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    -#{$prefix}-#{$property}: $value;
+  }
+
+  #{$property}: $value;
+}
+  
+.gray {
+  @include prefix(filter, grayscale(50%), moz webkit);
+}
+
+// 编译结果
+// .gray {
+//     -moz-filter: grayscale(50%);
+//     -webkit-filter: grayscale(50%);
+//     filter: grayscale(50%);
+//  }
+  
+  
+// Nesting 嵌套
+.enlarge {
+  font-size: 14px;
+  transition: {
+    property: font-size;
+    duration: 4s;
+    delay: 2s;
+  }
+
+  &:hover { font-size: 36px; }
+}
+
+// css 结果
+// .enlarge {
+//     font-size: 14px;
+//     transition-property: font-size;
+//     transition-duration: 4s;
+//     transition-delay: 2s;
+//   }
+//   .enlarge:hover {
+//     font-size: 36px;
+//   }
+ 
+
+// 命名空间
+.info-page {
+  margin: auto {
+    bottom: 10px;
+    top: 2px;
+    }
+}
+
+// css 结果
+// .info-page {
+//   margin: auto;
+//   margin-bottom: 10px;
+//   margin-top: 2px;
+// }
+  
+// 自定义属性
+
+$primary: #81899b;
+$accent: #302e24;
+$warn: #dfa612;
+
+:root {
+  --primary: #{$primary};
+  --accent: #{$accent};
+  --warn: #{$warn};
+
+  // Even though this looks like a Sass variable, it's valid CSS so it's not
+  // evaluated.
+  --consumed-by-js: $primary;
+}
+
+// :root {
+//   --primary: #81899b;
+//   --accent: #302e24;
+//   --warn: #dfa612;
+//   --consumed-by-js: $primary;
+// }

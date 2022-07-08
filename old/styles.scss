@@ -1,0 +1,36 @@
+// Style Rules
+// SCSS SYNTAX
+ul > {
+  li {
+    list-style-type: none;
+  }
+}
+
+h2 {
+  + p {
+    border-top: 1px solid gray;
+  }
+}
+
+p {
+  ~ {
+    span {
+      opacity: 0.8;
+    }
+  }
+}
+
+//编译成css
+// ul > li {
+//                 list-style-type: none;
+// }
+  
+// h2 + p {
+//     border-top: 1px solid gray;
+// }
+  
+// p ~ span {
+//     opacity: 0.8;
+// }
+  
+  

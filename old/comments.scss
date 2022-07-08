@@ -1,0 +1,21 @@
+// comments 注释
+/* comments */
+
+
+// Sass 编写样式库时,可以使用注释来记录您的库提供的mixins、函数(functions)、
+// 变量(variables)和占位符选择器(placeholder selectors) 
+// sassdoc:  http://sassdoc.com/upgrading/
+
+/// @param {number} $base
+///   The number to multiply by itself.
+/// @param {integer (unitless)} $exponent
+///   The number of `$base`s to multiply together.
+/// @return {number} `$base` to the power of `$exponent`.
+@function pow($base, $exponent) {
+    $result: 1;
+    @for $_ from 1 through $exponent {
+      $result: $result * $base;
+    }
+    @return $result;
+  }
+  

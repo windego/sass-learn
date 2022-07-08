@@ -1,0 +1,108 @@
+// @forward 
+
+// src/_list.scss
+@mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// bootstrap.scss
+@forward "src/list";
+
+// styles.scss
+@use "bootstrap";
+
+li {
+  @include bootstrap.list-reset;
+}
+
+// =>css
+// li {
+//   margin: 0;
+//   padding: 0;
+//   list-style: none;
+// }
+
+
+// demo 前缀
+
+// src/_list.scss
+@mixin reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// bootstrap.scss
+@forward "src/list" as list-*;
+
+// styles.scss
+@use "bootstrap";
+
+li {
+  @include bootstrap.list-reset;
+}
+
+// =>css
+// li {
+//   margin: 0;
+//   padding: 0;
+//   list-style: none;
+// }
+
+// demo 控制显隐
+// @forward "<url>" hide <members...> hide表格意味着不应该转发列出的成员，但其他所有内容都应该转发
+// @forward "<url>" show <members...> show形式意味着只应转发指定的成员
+
+// src/_list.scss
+$horizontal-list-gap: 2em;
+
+@mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin list-horizontal {
+  @include reset;
+
+  li {
+    display: inline-block;
+    margin: {
+      left: -2px;
+      right: $horizontal-list-gap;
+    }
+  }
+}
+
+// bootstrap.scss
+@forward "src/list" hide list-reset, $horizontal-list-gap;
+
+
+// demo 配置模块
+// _library.scss
+$black: #000 !default;
+$border-radius: 0.25rem !default;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15) !default;
+
+code {
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}
+
+// _opinionated.scss
+@forward 'library' with (
+  $black: #222 !default,
+  $border-radius: 0.1rem !default
+);
+
+// style.scss
+@use 'opinionated' with ($black: #333);
+
+// =>css
+// code {
+//   border-radius: 0.1rem;
+//   box-shadow: 0 0.5rem 1rem rgb(51 51 51 / 15%);
+// }
+  

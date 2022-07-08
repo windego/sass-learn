@@ -1,0 +1,29 @@
+// @import
+
+// 如果多次导入同一个样式表，则每次都会再次对其进行评估。
+// 如果它只是定义函数和 mixin，这通常没什么大不了的，
+// 但如果它包含样式规则，它们将被多次编译为CSS 。
+
+// demo
+// 纯CSS @imports 
+// 导入URL以 .结尾的 位置.css。
+@import "theme.css";// =>css @import url(theme.css);
+
+// 导入URL开始的位置http://或 https://.
+@import "http://fonts.googleapis.com/css?family=Droid+Sans";
+
+// 导入URL写为 url().
+@import url(theme);
+
+// 具有媒体查询的导入。 
+@import "landscape" screen and (orientation: landscape);
+
+// demo 插值
+@mixin google-font($family)
+  @import url("http://fonts.googleapis.com/css?family=#{$family}")
+
+
+  @include google-font("Droid Sans")
+
+//   @import url("http://fonts.googleapis.com/css?family=Droid Sans");
+

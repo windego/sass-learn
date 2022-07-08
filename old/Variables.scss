@@ -1,0 +1,213 @@
+// Variables 变量
+
+// CSS有自己的变量，与 Sass 变量完全不同。了解差异！
+
+// Sass 变量都被 Sass 编译掉了。CSS变量包含在CSS 输出中。
+
+// CSS变量对于不同的元素可以有不同的值，但 Sass 变量一次只有一个值。
+
+// Sass 变量是命令式的，这意味着如果你使用一个变量然后改变它的值，之前的使用将保持不变。
+// CSS变量是声明性的，这意味着如果您更改值，它将影响早期使用和后期使用。
+
+$base-color: #c6538c;
+$border-dark: rgba($base-color, 0.88);
+
+.alert {
+  border: 1px solid $border-dark;
+}
+
+// css
+// .alert {
+//     border: 1px solid rgba(198, 83, 140, 0.88);
+//   }
+
+// demo2
+$variable: value 1;
+
+.rule-1 {
+  value: $variable;
+}
+
+$variable: value 2;
+
+.rule-2 {
+  value: $variable;
+}
+
+
+// CSS 输出
+// .rule-1 {
+//   value: value 1;
+// }
+
+// .rule-2 {
+//   value: value 2;
+// }
+
+// !deault 默认值
+// _library.scss
+$black: #000 !default;
+$border-radius: 0.25rem !default;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15) !default;
+
+code {
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}
+
+// style.scss
+@use 'library' with (
+  $black: #222,
+  $border-radius: 0.1rem
+);
+
+// =>css
+
+// code {
+//   border-radius: 0.1rem;
+//   box-shadow: 0 0.5rem 1rem rgba(34, 34, 34, 0.15);
+// }
+
+
+
+// 不能修改由内置模块定义的变量。
+@use "sass:math" as math;
+
+// This assignment will fail.
+math.$pi: 0;
+
+
+
+
+// 范围
+// 在样式表的顶层声明的变量是全局的。
+// 这意味着在声明它们之后，可以在其模块中的任何位置访问它们
+// 在块中声明的那些（ SCSS中的花括号或 Sass 中的缩进代码）通常是local，
+
+
+$global-variable: global value;
+
+.content {
+  $local-variable: local value;
+
+  global: $global-variable;
+  local: $local-variable;
+}
+
+.sidebar {
+  global: $global-variable;
+
+  // This would fail, because $local-variable isn't in scope:
+  // local: $local-variable;
+}
+
+// =>css
+// .content {
+//   global: global value;
+//   local: local value;
+// }
+  
+// .sidebar {
+//   global: global value;
+// }
+  
+
+
+
+// 变量覆盖
+
+$variable: global value;
+
+.content {
+  $variable: local value;
+
+  value: $variable;
+}
+
+.sidebar {
+  value: $variable;
+}
+
+// =>css
+// .content {
+//   value: local value;
+// }
+  
+// .sidebar {
+//   value: global value;
+// }
+
+
+// 如果您需要在局部范围内（例如在 mixin 中）设置全局变量的值，
+// 则可以使用该!global标志。标记为的变量声明!global将始终分配给全局范围
+
+$variable: first global value;
+
+.content {
+  $variable: second global value !global;
+
+  value: $variable;
+}
+
+.sidebar {
+  value: $variable;
+}
+
+// =>css
+// .content {
+//   value: second global value;
+// }
+  
+// .sidebar {
+//   value: second global value;
+// }
+
+
+// 流控范围
+$dark-theme: true !default;
+$primary-color: #f8bbd0 !default;
+$accent-color: #6a1b9a !default;
+
+@if $dark-theme {
+  $primary-color: darken($primary-color, 60%);
+  $accent-color: lighten($accent-color, 60%);
+}
+
+.button {
+  background-color: $primary-color;
+  border: 1px solid $accent-color;
+  border-radius: 3px;
+}
+
+// =>css
+// .button {
+//   background-color: #750c30;
+//   border: 1px solid #f5ebfc;
+//   border-radius: 3px;
+// }
+
+
+// 高级变量函数
+// Sass 核心库提供了一些用于处理变量的高级函数。
+// meta.variable-exists()函数返回具有给定名称的变量是否存在于当前范围内，
+// meta.global-variable-exists()函数执行相同的操作，但仅针对全局范围。
+
+@use "sass:map";
+
+$theme-colors: (
+  "success": #28a745,
+  "info": #17a2b8,
+  "warning": #ffc107,
+);
+
+.alert {
+  // Instead of $theme-color-#{warning}
+  background-color: map.get($theme-colors, "warning");
+}
+
+// .alert {
+//     background-color: #ffc107;
+//   }
+
+
+  

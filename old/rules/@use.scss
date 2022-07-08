@@ -1,0 +1,229 @@
+// @use
+// foundation/_code.scss
+code {
+  padding: .25em;
+  line-height: 0;
+}
+
+// foundation/_lists.scss
+ul, ol {
+  text-align: left;
+  
+  & & {
+    padding: {
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
+
+// style.scss
+@use 'foundation/code';
+@use 'foundation/lists';
+
+// =>css
+// code {
+//   padding: .25em;
+//   line-height: 0;
+// }
+  
+// ul, ol {
+//   text-align: left;
+// }
+
+// ul ul, ol ol {
+//   padding-bottom: 0;
+//   padding-left: 0;
+// }
+  
+
+
+// demo2 命名空间
+// src/_corners.scss
+$radius: 3px;
+
+@mixin rounded {
+  border-radius: $radius;
+}
+
+// style.scss
+@use "src/corners";
+
+.button {
+  @include corners.rounded;
+
+  padding: 5px + corners.$radius;
+}
+
+// =>css
+// .button {
+//   border-radius: 3px;
+//   padding: 8px;
+// }
+  
+
+// =>重命名空间
+// src/_corners.scss
+$radius: 3px;
+
+@mixin rounded {
+  border-radius: $radius;
+}
+
+// style.scss
+@use "src/corners" as c;
+
+.button {
+  @include c.rounded;
+
+  padding: 5px + c.$radius;
+}
+
+// =>css
+// .button {
+//     border-radius: 3px;
+//     padding: 8px;
+//   }
+
+
+// demo @use "<url>" as *.
+// src/_corners.scss
+$radius: 3px;
+
+@mixin rounded {
+  border-radius: $radius;
+}
+
+// style.scss
+@use "src/corners" as *;
+
+.button {
+  @include rounded;
+
+  padding: 5px + $radius;
+}
+
+// =>css
+// .button {
+//     border-radius: 3px;
+//     padding: 8px;
+//   }
+  
+// 私有成员
+// src/_corners.scss
+$-radius: 3px;
+
+@mixin rounded {
+  border-radius: $-radius;
+}
+
+// style.scss
+@use "src/corners";
+
+.button {
+  @include corners.rounded;
+
+  // This is an error! $-radius isn't visible outside of `_corners.scss`.
+  // 不能用
+  padding: 5px + corners.$-radius;
+}
+
+// demo 
+// !default样式表可以使用标志定义变量以使其可配置
+// @use <url> with (<variable>: <value>, <variable>: <value>). 配置的值将覆盖变量的默认值。
+// _library.scss
+$black: #000 !default;
+$border-radius: 0.25rem !default;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15) !default;
+
+code {
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}
+
+// style.scss
+@use 'library' with (
+  $black: #222,
+  $border-radius: 0.1rem
+);
+
+// =>css
+// code {
+//   border-radius: 0.1rem;
+//   box-shadow: 0 0.5rem 1rem rgb(34 34 34 / 15%);
+// }
+
+
+
+// demo @mixin
+// _library.scss
+$-black: #000;
+$-border-radius: 0.25rem;
+$-box-shadow: null;
+
+/// If the user has configured `$-box-shadow`, returns their configured value.
+/// Otherwise returns a value derived from `$-black`.
+@function -box-shadow() {
+  @return $-box-shadow or (0 0.5rem 1rem rgba($-black, 0.15));
+}
+
+@mixin configure($black: null, $border-radius: null, $box-shadow: null) {
+  @if $black {
+    $-black: $black !global;
+  }
+  @if $border-radius {
+    $-border-radius: $border-radius !global;
+  }
+  @if $box-shadow {
+    $-box-shadow: $box-shadow !global;
+  }
+}
+
+@mixin styles {
+  code {
+    border-radius: $-border-radius;
+    box-shadow: -box-shadow();
+  }
+}
+
+// style.scss
+@use 'library';
+
+@include library.configure(
+  $black: #222,
+  $border-radius: 0.1rem
+);
+
+@include library.styles;
+
+// =>css
+code {
+  border-radius: 0.1rem;
+  box-shadow: 0 0.5rem 1rem rgb(34 34 34 / 15%);
+}
+  
+  
+
+// demo 重新分配变量
+// _library.sass
+$color: red
+
+// _override.sass
+@use 'library'
+library.$color: blue
+
+// style.sass
+@use 'library'
+@use 'override'
+@debug library.$color  //=> blue
+
+// demo 查找模块
+// @use "variables"将自动加载 variables.scss,variables.sass或 variables.css.
+// 无需写出扩展名
+
+// node_modules/susy/sass as a load path, you can use @use "susy" to load node_modules/susy/sass/susy.scss.
+
+// Sass 相对路径导入时, 无需书写 ./ 
+// 作为模块加载而不是自行编译的 Sass 文件以_(如_code.scss) 开头. 您可以_在导入部分时省略。
+
+// 除了加载.sass和.scss文件，Sass 还可以加载普通的旧 .css文件。

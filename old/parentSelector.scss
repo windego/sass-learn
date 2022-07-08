@@ -1,0 +1,139 @@
+
+// Parent Selector
+.alert {
+  // The parent selector can be used to add pseudo-classes to the outer
+  // selector.
+  &:hover {
+    font-weight: bold;
+  }
+  
+  // It can also be used to style the outer selector in a certain context, such
+  // as a body set to use a right-to-left language.
+  [dir=rtl] & {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+  
+  // You can even use it as an argument to pseudo-class selectors.
+  :not(&) {
+    opacity: 0.8;
+  }
+}
+
+// .alert:hover {
+//   font-weight: bold;
+// }
+
+// [dir=rtl] .alert {
+//   margin-left: 0;
+//   margin-right: 10px;
+// }
+
+// :not(.alert) {
+//   opacity: 0.8;
+// }
+  
+
+
+// 2.Adding Suffixes
+
+.accordion {
+  max-width: 600px;
+  margin: 4rem auto;
+  width: 90%;
+  font-family: Raleway, sans-serif;
+  background: #f4f4f4;
+  
+  &__copy {
+    display: none;
+    padding: 1rem 1.5rem 2rem;
+    color: gray;
+    line-height: 1.6;
+    font-size: 14px;
+    font-weight: 500;
+  
+    &--open {
+      display: block;
+    }
+  }
+}
+
+// ==>css
+// .accordion {
+//     max-width: 600px;
+//     margin: 4rem auto;
+//     width: 90%;
+//     font-family: "Raleway", sans-serif;
+//     background: #f4f4f4;
+//   }
+//   .accordion__copy {
+//     display: none;
+//     padding: 1rem 1.5rem 2rem 1.5rem;
+//     color: gray;
+//     line-height: 1.6;
+//     font-size: 14px;
+//     font-weight: 500;
+//   }
+//   .accordion__copy--open {
+//     display: block;
+//   }
+  
+
+// ==SassScript
+.main aside:hover,
+.sidebar p {
+  parent-selector: &;
+
+  // => ((unquote(".main") unquote("aside:hover")),
+  //     (unquote(".sidebar") unquote("p")))
+}
+
+// .main aside:hover,
+// .sidebar p {
+//   parent-selector: .main aside:hover, .sidebar p;
+// }
+
+
+@mixin app-background($color) {
+  #{if(&, '&.app-background', '.app-background')} {
+    background-color: $color;
+    color: rgba(#fff, 0.75);
+  }
+}
+
+@include app-background(#036);
+
+.sidebar {
+  @include app-background(#c6538c);
+}
+
+// .app-background {
+//     background-color: #036;
+//     color: rgba(255, 255, 255, 0.75);
+//   }
+  
+//   .sidebar.app-background {
+//     background-color: #c6538c;
+//     color: rgba(255, 255, 255, 0.75);
+//   }
+  
+
+// 高级嵌套  Advanced Nesting
+@use "sass:selector";
+
+@mixin unify-parent($child) {
+  @at-root #{selector.unify(&, $child)} {
+    @content;
+  }
+}
+
+.wrapper .field {
+  @include unify-parent("input") {
+    /* ... */
+  }
+  @include unify-parent("select") {
+    /* ... */
+  }
+}
+
+
