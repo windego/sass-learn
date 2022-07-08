@@ -17,14 +17,16 @@ module.exports = {
           'forward',
           'each',
           'debug',
-          'at-root'
+          'at-root',
+          'warn',
+          'extend',
         ],
       },
     ],
     'font-family-no-missing-generic-family-keyword': [
       true,
       {
-        ignoreFontFamilies: ['IconFont'],
+        ignoreFontFamilies: ['IconFont','Calluna'],
       },
     ],
     'keyframes-name-pattern':null
